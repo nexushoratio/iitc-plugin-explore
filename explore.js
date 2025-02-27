@@ -193,7 +193,7 @@ window.plugin.explore.Data = class {
   /** Populate current data from a plain-old JavaScript object. */
   #fromPojo(pojo) {
     if (Object.hasOwn(pojo, 'boundary')) {
-      this.boundary = L.latLngBounds(pojo.boundary.ne, pojo.boundary.sw)
+      this.boundary = L.latLngBounds(pojo.boundary.ne, pojo.boundary.sw);
     } else {
       this.boundary = window.map.getBounds();
     }
@@ -213,7 +213,7 @@ window.plugin.explore.Data = class {
     }
   }
 
-}
+};
 
 /** Manages most state for exploring. */
 window.plugin.explore.State = class {
@@ -389,7 +389,7 @@ window.plugin.explore.State = class {
           label: 'Explored',
         }
       }
-    }
+    };
     const dateSeq = this.#sequenceDate(new Date());
     const filename = `IITC-exploration-${dateSeq}.json`;
     window.saveFile(JSON.stringify(data, null, 2),
@@ -427,7 +427,7 @@ window.plugin.explore.State = class {
         const opts = {
           body: msg,
           requireInteraction: true,
-        }
+        };
         if (this.data.useNotifications) {
           new Notification('Exploring stopped', opts);
         }
@@ -510,7 +510,7 @@ window.plugin.explore.State = class {
   #formatDate(date) {
     let result = '--';
     if (date) {
-      result = window.unixTimeToDateTimeString(date.getTime(), false)
+      result = window.unixTimeToDateTimeString(date.getTime(), false);
     }
     return result;
   }
@@ -647,7 +647,7 @@ window.plugin.explore.State = class {
     return dest;
   }
 
-}
+};
 
 /**
  * Prepend an `input` to an element.
@@ -660,12 +660,12 @@ window.plugin.explore._prependInput = function(element, config, changeHandler) {
   Object.assign(input, config);
   input.addEventListener('change', changeHandler);
   element.prepend(input);
-}
+};
 
 /** Triggered after a suitable delay. */
 window.plugin.explore.processMap = function() {
   window.plugin.explore.state.process();
-}
+};
 
 /** Triggered after all portals in the current view are loaded. */
 window.plugin.explore.dataRefreshed = function() {
@@ -681,7 +681,7 @@ window.plugin.explore.dataRefreshed = function() {
     state.status = `Waiting for ${state.delay} ms`;
     setTimeout(window.plugin.explore.processMap, state.delay);
   }
-}
+};
 
 /**
  * Triggered after a portal is viewed.
@@ -703,12 +703,12 @@ window.plugin.explore.portalDetailsUpdated = function(details) {
     console.log('restarting...');
     state.start();
   }
-}
+};
 
 /** Triggered from a command. */
 window.plugin.explore.tbd = function() {
   window.plugin.explore.state.status = 'Command not implemented';
-}
+};
 
 /** Triggered from a command button. */
 window.plugin.explore.toggle_exploring = function() {
@@ -719,22 +719,22 @@ window.plugin.explore.toggle_exploring = function() {
   } else {
     state.start();
   }
-}
+};
 
 /** Triggered from a command. */
 window.plugin.explore.save = function() {
   window.plugin.explore.state.save();
-}
+};
 
 /** Triggered from a command. */
 window.plugin.explore.clear = function() {
   window.plugin.explore.state.clear();
-}
+};
 
 /** Triggered from a command. */
 window.plugin.explore.refresh = function() {
   window.plugin.explore.state.refreshLayers();
-}
+};
 
 /** Triggered from a command. */
 window.plugin.explore.use_view = function() {
@@ -742,7 +742,7 @@ window.plugin.explore.use_view = function() {
 
   state.data.boundary = window.map.getBounds();
   state.status = 'Bounds set to current view';
-}
+};
 
 /** Triggered from a command. */
 window.plugin.explore.extend_view = function() {
@@ -750,7 +750,7 @@ window.plugin.explore.extend_view = function() {
 
   state.data.extendBoundary(window.map.getBounds());
   state.status = 'Bounds now includes current view';
-}
+};
 
 /** Triggered from a command. */
 window.plugin.explore.use_drawtools = function() {
@@ -763,7 +763,7 @@ window.plugin.explore.use_drawtools = function() {
   } else {
     state.status = 'Setting from DrawTools failed (no drawing?)';
   }
-}
+};
 
 /** Triggered from a command. */
 window.plugin.explore.use_bookmarks = function() {
@@ -778,7 +778,7 @@ window.plugin.explore.use_bookmarks = function() {
   } else {
     state.status = 'Setting from Bookmarks failed (none saved?)';
   }
-}
+};
 
 /**
  * Triggered from a command.
@@ -790,7 +790,7 @@ window.plugin.explore.toggle_notifications = function(evt) {
   if (evt.type === 'change') {
     if (evt.target.checked) {
       if (Notification.permission === 'default') {
-        Notification.requestPermission().then((permission) => {
+        Notification.requestPermission().then(() => {
           if (Notification.permission === 'denied') {
             evt.target.checked = false;
             evt.target.disabled = true;
@@ -801,7 +801,7 @@ window.plugin.explore.toggle_notifications = function(evt) {
     }
     state.data.useNotifications = evt.target.checked;
   }
-}
+};
 
 /**
  * Triggered from a command.
@@ -813,7 +813,7 @@ window.plugin.explore.toggle_automation = function(evt) {
   if (evt.type === 'change') {
     state.data.useAutomation = evt.target.checked;
   }
-}
+};
 
 /** Opens the dialog/dashboard. */
 window.plugin.explore.central = function() {
@@ -903,7 +903,7 @@ window.plugin.explore.central = function() {
   div.append(table);
   dia.on('dialogclose', () => {window.plugin.explore.state.dialog = null;});
   window.plugin.explore.state.dialog = dia;
-}
+};
 
 /** Called when IITC is fully loaded. */
 window.plugin.explore.iitcLoaded = function() {
@@ -916,7 +916,7 @@ window.plugin.explore.iitcLoaded = function() {
     'Explore bounds',
     {default: false},
   );
-}
+};
 
 /** IITC plugin entry point. */
 function setup() {
