@@ -341,8 +341,18 @@ window.plugin.explore.State = class {
               } else {
                 // getEntities often drops moved portals.  Affects stock intel
                 // as well, only it does not even bother with a placeholder.
+                // With any luck, calling renderPortalDetails() will load the
+                // data.  It depends on how messed up Intel is for a
+                // particular portal.
                 window.renderPortalDetails(marker.options.guid);
                 console.log('placeholder:', marker.options.data);
+                // XXX: We currently MUST call stop() rather than throwing an
+                // Exception here.  If automation is enabled, the map will be
+                // moved, causing network traffic, which will break the
+                // renderPortalDetails() we just made (by way of the low level
+                // postAjax() call).  Then automation will restart the
+                // process.  But the portal data still has not been loaded,
+                // and we go through the whole process again.
                 this.stop('Saw placeholder (link to a moved portal?)');
                 return;
               }
