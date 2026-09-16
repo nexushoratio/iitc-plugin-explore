@@ -664,12 +664,14 @@ window.plugin.explore.State = class {
  * @param {HTMLElement} element - Element to modify.
  * @param {object} config - Initial configuration.
  * @param {function(Event)} changeHandler - Handler for `change` event.
+ * @returns {HTMLElement) Newly created input element.
  */
 window.plugin.explore._prependInput = function(element, config, changeHandler) {
   const input =  document.createElement('input');
   Object.assign(input, config);
   input.addEventListener('change', changeHandler);
   element.prepend(input);
+  return input;
 };
 
 /** Triggered after a suitable delay. */
