@@ -439,7 +439,11 @@ window.plugin.explore.State = class {
           requireInteraction: true,
         };
         if (this.data.useNotifications) {
-          new Notification('Exploring stopped', opts);
+          // Default to true (show)
+          if (this.notifications.get(msg) ?? true) {
+            new Notification('Exploring stopped', opts);
+            this.notifications.set(msg, true);
+          }
         }
         this.status = msg;
       } else {
@@ -468,6 +472,8 @@ window.plugin.explore.State = class {
     this.#rect = L.rectangle(this.data.boundary, {color: this.#colorBoundary});
     this.#rect.addTo(this.layerGroup);
   }
+
+  notifications = new Map();
 
   #colorBoundary = 'red';
   #colorExplored = 'orange';
