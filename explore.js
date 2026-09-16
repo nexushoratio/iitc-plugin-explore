@@ -890,9 +890,7 @@ window.plugin.explore.central = function() {
     const wrapper = document.createElement('div');
     const elem = document.createElement(item.elem);
     elem.innerText = item.label;
-    if (item.post_create) {
-      item.post_create(elem);
-    }
+    item.post_create?.(elem);
     elem.addEventListener('click', item.func);
     wrapper.append(elem);
     div.append(wrapper);
