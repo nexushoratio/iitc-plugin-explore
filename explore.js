@@ -798,6 +798,33 @@ window.plugin.explore.use_bookmarks = function() {
   }
 };
 
+/** Triggered from a command. */
+window.plugin.explore.notification_filters = function() {
+  const state = window.plugin.explore.state;
+
+  const html = '<p>Filters are not yet persistent.</p>' +
+        '<p>Checked means show that notification message.</p>' +
+        '<div class="button-menu"></div>';
+  const dia = dialog({
+    title: 'Notification Filters',
+    id: 'explore-notification-filters',
+    html: html,
+  });
+  const div = dia.find('div');
+  for (const [msg, show] of state.notifications.entries()) {
+    const elem = document.createElement('div');
+    elem.innerText = msg;
+    const config = {
+      type: 'checkbox',
+      checked: show,
+    };
+    window.plugin.explore._prependInput(elem, config, (evt) => {
+      state.notifications.set(evt.target.dataset.msg, evt.target.checked);
+    }).dataset.msg = msg;
+    div.append(elem);
+  }
+};
+
 /**
  * Triggered from a command.
  * @param {Event} evt - Triggering event.
@@ -859,6 +886,11 @@ window.plugin.explore.central = function() {
       func: explore.use_bookmarks,
     });
   }
+  commands.push({
+    elem: 'button',
+    label: 'Notification Filters',
+    func: explore.notification_filters,
+  });
   if (Notification.permission !== 'granted') {
     explore.state.data.useNotifications = false;
   }
