@@ -804,7 +804,7 @@ window.plugin.explore.notification_filters = function() {
 
   const html = '<p>Filters are not yet persistent.</p>' +
         '<p>Checked means show that notification message.</p>' +
-        '<div class="button-menu"></div>';
+        '<div></div>';
   const dia = dialog({
     title: 'Notification Filters',
     id: 'explore-notification-filters',
