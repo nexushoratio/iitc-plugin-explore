@@ -875,14 +875,14 @@ window.plugin.explore.central = function() {
   if (window.plugin.drawTools) {
     commands.push({
       elem: 'button',
-      label: 'Set boundary from DrawTools',
+      label: 'Set Boundary from DrawTools',
       func: explore.use_drawtools,
     });
   }
   if (window.plugin.bookmarks) {
     commands.push({
       elem: 'button',
-      label: 'Set boundary from Bookmarks',
+      label: 'Set Boundary from Bookmarks',
       func: explore.use_bookmarks,
     });
   }
