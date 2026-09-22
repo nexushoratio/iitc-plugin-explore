@@ -918,7 +918,7 @@ window.plugin.explore.central = function() {
     func: explore.toggle_automation,
   });
 
-  const html = `<div class='button-menu'>
+  const html = `<div class='command-menu'>
     </div>`;
   const dia = dialog({
     title: 'Explore Central',
@@ -969,7 +969,7 @@ window.plugin.explore.iitcLoaded = function() {
 /** IITC plugin entry point. */
 function setup() {
   const style = `<style>
-    .button-menu button {
+    .command-menu button {
       display: block;
       width: 80%;
       margin: 10px auto;
