@@ -818,9 +818,21 @@ window.plugin.explore.notification_filters = function() {
       type: 'checkbox',
       checked: show,
     };
-    window.plugin.explore._prependInput(elem, config, (evt) => {
-      state.notifications.set(evt.target.dataset.msg, evt.target.checked);
-    }).dataset.msg = msg;
+    const checkbox = window.plugin.explore._prependInput(
+      elem, config, (evt) => {
+        state.notifications.set(evt.target.dataset.msg, evt.target.checked);
+      });
+    checkbox.dataset.msg = msg;
+    const icon = document.createElement('iitc-icon');
+    icon.innerText = 'delete';
+    const button = document.createElement('button');
+    button.dataset.msg = msg;
+    button.addEventListener('click', (evt) => {
+      state.notifications.delete(evt.currentTarget.dataset.msg);
+      window.plugin.explore.notification_filters();
+    });
+    button.append(icon);
+    checkbox.after(button);
     div.append(elem);
   }
 };
@@ -979,6 +991,10 @@ function setup() {
     }
     .plugin-explore-labels {
       line-height: normal;
+    }
+    #dialog-explore-notification-filters button {
+      min-width: auto;
+      margin-right: 1ex;
     }
   </style>`;
   $('head').append(style);
