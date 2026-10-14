@@ -96,6 +96,25 @@ window.plugin.explore.Data = class {
     this.save();
   }
 
+  messageGet(msg) {
+    if (!this.#messages.has(msg)) {
+      this.messageSet(msg, true);
+    }
+    return this.#messages.get(msg);
+  }
+
+  messageAll() {
+    return this.#messages.entries();
+  }
+
+  messageSet(msg, show) {
+    this.#messages.set(msg, Boolean(show));
+  }
+
+  messageDel(msg) {
+    this.#messages.delete(msg);
+  }
+
   /**
    * @param {L.circleMarker} marker - As enhanced when added to
    * window.portals.
@@ -163,6 +182,7 @@ window.plugin.explore.Data = class {
   #current
   #deferSaved = false;
   #loading
+  #messages = new Map();
   #portals = new Map();
   #state
   #useAutomation = false;
@@ -440,9 +460,8 @@ window.plugin.explore.State = class {
         };
         if (this.data.useNotifications) {
           // Default to true (show)
-          if (this.notifications.get(msg) ?? true) {
+          if (this.data.messageGet(msg)) {
             new Notification('Exploring stopped', opts);
-            this.notifications.set(msg, true);
           }
         }
         this.status = msg;
@@ -811,7 +830,7 @@ window.plugin.explore.notification_filters = function() {
     html: html,
   });
   const div = dia.find('div');
-  for (const [msg, show] of state.notifications.entries()) {
+  for (const [msg, show] of state.data.messageAll()) {
     const elem = document.createElement('div');
     elem.innerText = msg;
     const config = {
@@ -820,7 +839,7 @@ window.plugin.explore.notification_filters = function() {
     };
     const checkbox = window.plugin.explore._prependInput(
       elem, config, (evt) => {
-        state.notifications.set(evt.target.dataset.msg, evt.target.checked);
+        state.data.messageSet(evt.target.dataset.msg, evt.target.checked);
       });
     checkbox.dataset.msg = msg;
     const icon = document.createElement('iitc-icon');
@@ -828,7 +847,7 @@ window.plugin.explore.notification_filters = function() {
     const button = document.createElement('button');
     button.dataset.msg = msg;
     button.addEventListener('click', (evt) => {
-      state.notifications.delete(evt.currentTarget.dataset.msg);
+      state.data.messageDel(evt.currentTarget.dataset.msg);
       window.plugin.explore.notification_filters();
     });
     button.append(icon);
