@@ -279,8 +279,8 @@ window.plugin.explore.State = class {
   }
 
   /** @type {string[]} - Defines names for the dashboard fields. */
-  get dialogKeys() {
-    return Object.keys(this.#dialogMapping);
+  get dashboardKeys() {
+    return Object.keys(this.#dashboardMapping);
   }
 
   /** @type {boolean} - Current status of exploring. */
@@ -510,7 +510,7 @@ window.plugin.explore.State = class {
   #colorExplored = 'orange';
   #counted = 0;
   #data
-  #dialogMapping = {
+  #dashboardMapping = {
     'Exploring': 'exploring',
     'Views explored': 'iteration',
     'Last process count': 'counted',
@@ -633,7 +633,7 @@ window.plugin.explore.State = class {
   /** Update the dialog/dashboard. */
   #populateCentralDialog() {
     if (this.centralDialog) {
-      for (const [key, prop] of Object.entries(this.#dialogMapping)) {
+      for (const [key, prop] of Object.entries(this.#dashboardMapping)) {
         const cell = this.centralDialog.find(`[data-id='${key}']`);
         cell.text(this[prop]);
       }
@@ -979,7 +979,7 @@ window.plugin.explore.central = function() {
   }
   const table = document.createElement('table');
   const tbody = document.createElement('tbody');
-  for (const item of window.plugin.explore.state.dialogKeys) {
+  for (const item of window.plugin.explore.state.dashboardKeys) {
     const row = document.createElement('tr');
     const label = document.createElement('td');
     const value = document.createElement('td');
