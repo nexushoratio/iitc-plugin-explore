@@ -266,15 +266,15 @@ window.plugin.explore.State = class {
   }
 
   /** @type {jQuery.Widget} - Current dialog (doubles as a dashboard). */
-  get dialog() {
-    return this.#dialog;
+  get centralDialog() {
+    return this.#centralDialog;
   }
 
   /** @param {jQuery.Widget} val - Current dialog (doubles as a dashboard). */
-  set dialog(val) {
-    this.#dialog = val;
+  set centralDialog(val) {
+    this.#centralDialog = val;
     if (val) {
-      this.#populateDialog();
+      this.#populateCentralDialog();
     }
   }
 
@@ -327,7 +327,7 @@ window.plugin.explore.State = class {
   /** @param {string} val - Generic status message for the dashboard. */
   set status(val) {
     this.#status = val;
-    this.#populateDialog();
+    this.#populateCentralDialog();
   }
 
   /** @type {number} - Current number of portals known about. */
@@ -347,7 +347,7 @@ window.plugin.explore.State = class {
   clear() {
     this.stop();
     this.data.clearPortals();
-    this.#populateDialog();
+    this.#populateCentralDialog();
   }
 
   /** Process the current view of the map. */
@@ -391,7 +391,7 @@ window.plugin.explore.State = class {
           }
           this.#processTime = new Date();
           this.data.current = bounds.getCenter();
-          this.#populateDialog();
+          this.#populateCentralDialog();
           this.#addCountLabel(this.data.current, this.#counted);
           L.rectangle(bounds, {color: this.#colorExplored})
             .addTo(this.layerGroup);
@@ -453,7 +453,7 @@ window.plugin.explore.State = class {
       this.#startTime = new Date();
       this.#stopTime = null;
       this.#moveTo(this.#startDest());
-      this.#populateDialog();
+      this.#populateCentralDialog();
     }
   }
 
@@ -484,7 +484,7 @@ window.plugin.explore.State = class {
     }
     this.delay = null;
     this.#exploring = false;
-    this.#populateDialog();
+    this.#populateCentralDialog();
   }
 
   /** Triggers updating the boundary on the map layer. */
@@ -505,11 +505,11 @@ window.plugin.explore.State = class {
 
   notifications = new Map();
 
+  #centralDialog
   #colorBoundary = 'red';
   #colorExplored = 'orange';
   #counted = 0;
   #data
-  #dialog
   #dialogMapping = {
     'Exploring': 'exploring',
     'Views explored': 'iteration',
@@ -631,10 +631,10 @@ window.plugin.explore.State = class {
   }
 
   /** Update the dialog/dashboard. */
-  #populateDialog() {
-    if (this.dialog) {
+  #populateCentralDialog() {
+    if (this.centralDialog) {
       for (const [key, prop] of Object.entries(this.#dialogMapping)) {
-        const cell = this.dialog.find(`[data-id='${key}']`);
+        const cell = this.centralDialog.find(`[data-id='${key}']`);
         cell.text(this[prop]);
       }
     }
@@ -991,8 +991,8 @@ window.plugin.explore.central = function() {
   }
   table.append(tbody);
   div.append(table);
-  dia.on('dialogclose', () => {window.plugin.explore.state.dialog = null;});
-  window.plugin.explore.state.dialog = dia;
+  dia.on('dialogclose', () => {explore.state.centralDialog = null;});
+  explore.state.centralDialog = dia;
 };
 
 /** Called when IITC is fully loaded. */
