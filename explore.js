@@ -109,10 +109,12 @@ window.plugin.explore.Data = class {
 
   messageSet(msg, show) {
     this.#messages.set(msg, Boolean(show));
+    this.save();
   }
 
   messageDel(msg) {
     this.#messages.delete(msg);
+    this.save();
   }
 
   /**
@@ -198,6 +200,7 @@ window.plugin.explore.Data = class {
         sw: {lat: sw.lat, lng: sw.lng},
       },
       portals: {},
+      messages: {},
       useAutomation: this.#useAutomation,
       useNotifications: this.#useNotifications,
     };
@@ -206,6 +209,9 @@ window.plugin.explore.Data = class {
     }
     for (const [guid, portal] of this.portals.entries()) {
       pojo.portals[guid] = portal;
+    }
+    for (const [msg, show] of this.#messages.entries()) {
+      pojo.messages[msg] = show;
     }
     return pojo;
   }
@@ -223,6 +229,11 @@ window.plugin.explore.Data = class {
     if (Object.hasOwn(pojo, 'portals')) {
       for (const [guid, portal] of Object.entries(pojo.portals)) {
         this.portals.set(guid, portal);
+      }
+    }
+    if (Object.hasOwn(pojo, 'messages')) {
+      for (const [msg, show] of Object.entries(pojo.messages)) {
+        this.#messages.set(msg, show);
       }
     }
     if (Object.hasOwn(pojo, 'useNotifications')) {
