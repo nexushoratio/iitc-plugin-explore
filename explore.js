@@ -483,7 +483,6 @@ window.plugin.explore.State = class {
           requireInteraction: true,
         };
         if (this.data.useNotifications) {
-          // Default to true (show)
           if (this.data.messageGet(msg)) {
             new Notification('Exploring stopped', opts);
           }
@@ -548,8 +547,6 @@ window.plugin.explore.State = class {
       }
     }
   }
-
-  notifications = new Map();
 
   #centralDialog
   #colorBoundary = 'red';
