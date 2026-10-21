@@ -278,6 +278,19 @@ window.plugin.explore.State = class {
     }
   }
 
+  /** @type {jQuery.Widget} */
+  get notificationFilterDialog() {
+    return this.#notificationFilterDialog;
+  }
+
+  /** @param {jQuery.Widget} val */
+  set notificationFilterDialog(val) {
+    this.#notificationFilterDialog = val;
+    if (val) {
+      this.updateNotificationFiltersDialog();
+    }
+  }
+
   /** @type {string[]} - Defines names for the dashboard fields. */
   get dashboardKeys() {
     return Object.keys(this.#dashboardMapping);
@@ -503,6 +516,39 @@ window.plugin.explore.State = class {
     this.#rect.addTo(this.layerGroup);
   }
 
+  updateNotificationFiltersDialog() {
+    if (this.notificationFilterDialog) {
+      const state = window.plugin.explore.state;
+      const div = this.notificationFilterDialog.find('div');
+      div.empty();
+
+      for (const [msg, show] of state.data.messageAll()) {
+        const elem = document.createElement('div');
+        elem.innerText = msg;
+        const config = {
+          type: 'checkbox',
+          checked: show,
+        };
+        const checkbox = window.plugin.explore._prependInput(
+          elem, config, (evt) => {
+            state.data.messageSet(evt.target.dataset.msg, evt.target.checked);
+          });
+        checkbox.dataset.msg = msg;
+        const icon = document.createElement('iitc-icon');
+        icon.innerText = 'delete';
+        const button = document.createElement('button');
+        button.dataset.msg = msg;
+        button.addEventListener('click', (evt) => {
+          state.data.messageDel(evt.currentTarget.dataset.msg);
+          this.updateNotificationFiltersDialog();
+        });
+        button.append(icon);
+        checkbox.after(button);
+        div.append(elem);
+      }
+    }
+  }
+
   notifications = new Map();
 
   #centralDialog
@@ -525,6 +571,7 @@ window.plugin.explore.State = class {
   #iteration = 0;
   #layerGroup
   #markerCache = new Map();
+  #notificationFilterDialog
   #processTime = null;
   #rect
   #startTime = null;
@@ -840,31 +887,8 @@ window.plugin.explore.notification_filters = function() {
     id: 'explore-notification-filters',
     html: html,
   });
-  const div = dia.find('div');
-  for (const [msg, show] of state.data.messageAll()) {
-    const elem = document.createElement('div');
-    elem.innerText = msg;
-    const config = {
-      type: 'checkbox',
-      checked: show,
-    };
-    const checkbox = window.plugin.explore._prependInput(
-      elem, config, (evt) => {
-        state.data.messageSet(evt.target.dataset.msg, evt.target.checked);
-      });
-    checkbox.dataset.msg = msg;
-    const icon = document.createElement('iitc-icon');
-    icon.innerText = 'delete';
-    const button = document.createElement('button');
-    button.dataset.msg = msg;
-    button.addEventListener('click', (evt) => {
-      state.data.messageDel(evt.currentTarget.dataset.msg);
-      window.plugin.explore.notification_filters();
-    });
-    button.append(icon);
-    checkbox.after(button);
-    div.append(elem);
-  }
+  dia.on('dialogclose', () => { state.notificationFilterDialog = null; });
+  state.notificationFilterDialog = dia;
 };
 
 /**
