@@ -876,8 +876,7 @@ window.plugin.explore.use_bookmarks = function() {
 window.plugin.explore.notification_filters = function() {
   const state = window.plugin.explore.state;
 
-  const html = '<p>Filters are not yet persistent.</p>' +
-        '<p>Checked means show that notification message.</p>' +
+  const html = '<p>Checked items are shown:</p>' +
         '<div></div>';
   const dia = dialog({
     title: 'Notification Filters',
